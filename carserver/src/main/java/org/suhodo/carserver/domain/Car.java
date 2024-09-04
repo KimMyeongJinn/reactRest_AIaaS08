@@ -2,10 +2,7 @@ package org.suhodo.carserver.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -13,21 +10,24 @@ import javax.persistence.Id;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "owner")
 public class Car {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String brand;
     private String model;
     private String color;
     private String registerNumber;
 
-    private int year;
-    private int price;
+    private Integer year;
+    private Integer price;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="owner_id")        // 외부키의 이름을 직접 지정
+    private Owner owner;
 }
 
 

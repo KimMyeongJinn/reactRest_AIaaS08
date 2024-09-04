@@ -6,7 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.suhodo.carserver.domain.Car;
+import org.suhodo.carserver.domain.Owner;
 import org.suhodo.carserver.repository.CarRepository;
+import org.suhodo.carserver.repository.OwnerRepository;
 
 import java.util.Arrays;
 
@@ -15,6 +17,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class CarserverApplication implements CommandLineRunner {
 
+    private final OwnerRepository ownerRepository;
     private final CarRepository carRepository;
 
     public static void main(String[] args) {
@@ -26,6 +29,19 @@ public class CarserverApplication implements CommandLineRunner {
     // 어플리케이션이 실행될 때 자동으로 호출됨
     @Override
     public void run(String... args) throws Exception {
+        Owner owner0 = Owner.builder()
+                .firstName("John")
+                .lastName("Smith")
+                .build();
+        Owner owner1 = Owner.builder()
+                .firstName("Henry")
+                .lastName("Fonda")
+                .build();
+        Owner owner2 = Owner.builder()
+                .firstName("Tomas")
+                .lastName("Cruise")
+                .build();
+        ownerRepository.saveAll(Arrays.asList(owner0, owner1, owner2));
 
         Car car0 = Car.builder()
                 .brand("Ford")
@@ -34,6 +50,7 @@ public class CarserverApplication implements CommandLineRunner {
                 .registerNumber("AAA-111")
                 .year(2024)
                 .price(6400)
+                .owner(owner0)
                 .build();
         Car car1 = Car.builder()
                 .brand("Hyndai")
@@ -42,6 +59,7 @@ public class CarserverApplication implements CommandLineRunner {
                 .registerNumber("HHH-111")
                 .year(2024)
                 .price(8500)
+                .owner(owner1)
                 .build();
         Car car2 = Car.builder()
                 .brand("Kia")
@@ -50,6 +68,7 @@ public class CarserverApplication implements CommandLineRunner {
                 .registerNumber("KKK-111")
                 .year(2024)
                 .price(4300)
+                .owner(owner2)
                 .build();
         carRepository.saveAll(Arrays.asList(car0, car1, car2));
 //        carRepository.save(car0);
