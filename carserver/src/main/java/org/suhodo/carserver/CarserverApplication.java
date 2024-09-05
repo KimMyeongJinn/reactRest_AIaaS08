@@ -70,7 +70,25 @@ public class CarserverApplication implements CommandLineRunner {
                 .price(4300)
                 .owner(owner2)
                 .build();
-        carRepository.saveAll(Arrays.asList(car0, car1, car2));
+        Car car3 = Car.builder()
+                .brand("현대")
+                .model("그랜저")
+                .color("black")
+                .registerNumber("HHH-2222")
+                .year(2024)
+                .price(8500)
+                .owner(owner0)
+                .build();
+        Car car4 = Car.builder()
+                .brand("기아")
+                .model("뉴카렌스")
+                .color("silver")
+                .registerNumber("KKK-222")
+                .year(2024)
+                .price(4300)
+                .owner(owner1)
+                .build();
+        carRepository.saveAll(Arrays.asList(car0, car1, car2, car3, car4));
 //        carRepository.save(car0);
 //        carRepository.save(car1);
 //        carRepository.save(car2);
