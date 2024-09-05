@@ -48,8 +48,7 @@ http://서버주소:포트/api로 요청하게 되면
 
     Header > Content-Type : text/uri-list
     Body > raw > Text
-    http://localhost:12000/api/owners/4
-    전송
+    다음 주소를 Text 창에 붙여서 전송  http://localhost:12000/api/owners/4
 * */
 
 public interface CarRepository extends JpaRepository<Car, Long> {
