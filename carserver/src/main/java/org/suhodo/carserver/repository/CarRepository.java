@@ -50,7 +50,22 @@ http://서버주소:포트/api로 요청하게 되면
     Body > raw > Text
     다음 주소를 Text 창에 붙여서 전송  http://localhost:12000/api/owners/4
     ID가 4인 owner를 ID가 11인 car의 owner로 연결한다.
-* */
+7. paging
+    GET - http://localhost:12000/api/cars?page=1&size=10&sort=price,desc
+    1 page, 10개씩, price를 기준으로 내림차순 정렬(큰 값을 우선)
+8. search
+    GET - http://localhost:12000/api/cars/search/findByBrand?brand=Ford
+    GET - http://localhost:12000/api/cars/search/findByColor?color=silver
+9. ID가 11인 car의 color 정보 update
+    PATCH - http://localhost:12000/api/cars/11
+     Body > raw > JSON
+     {
+        "color":"gold"
+     }
+     전송
+10. ID가 3인 car의 정보 delete
+    DELETE - http://localhost:12000/api/cars/3
+*/
 
 public interface CarRepository extends JpaRepository<Car, Long> {
     List<Car> findByBrand(String brand);
