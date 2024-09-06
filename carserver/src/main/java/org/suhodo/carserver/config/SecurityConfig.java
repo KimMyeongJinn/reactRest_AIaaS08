@@ -60,12 +60,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // /login엔드포인트에 대한 POST요청은 누구나 접근을 허용함
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                // 임시로 모든 요청을 허용한다
+                .anyRequest().permitAll();
                 // 다른 엔트포인트 요청은 인증 과정을 거쳐야 접근할 수 있다.
-                .anyRequest().authenticated().and()
+//                .anyRequest().authenticated().and()
                 // /login을 제외한 나머지 모든 요청은 필터를 인증 전단계에서 거치게 된다.
-                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 // 인증에 오류가 있을 때, 오류 응답 처리를 authEntryPoint가 담당한다.
-                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
+//                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
     }
 
     // CORS(Cross-Origin Resource Sharing)
