@@ -13,6 +13,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.suhodo.carserver.except.AuthEntryPoint;
+import org.suhodo.carserver.filter.AuthenticationFilter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -20,6 +29,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
+    private final AuthenticationFilter authenticationFilter;
+    private final AuthEntryPoint authEntryPoint;
 
     /* Spring Security내부에서 인증과정시 사용하는 AuthenticationManager객체를
     LoginController에서 접근할 수 있도록
@@ -50,6 +61,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // /login엔드포인트에 대한 POST요청은 누구나 접근을 허용함
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 // 다른 엔트포인트 요청은 인증 과정을 거쳐야 접근할 수 있다.
-                .anyRequest().authenticated();
+                .anyRequest().authenticated().and()
+                // /login을 제외한 나머지 모든 요청은 필터를 인증 전단계에서 거치게 된다.
+                .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                // 인증에 오류가 있을 때, 오류 응답 처리를 authEntryPoint가 담당한다.
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint);
+    }
+
+    // CORS(Cross-Origin Resource Sharing)
+    // REST API Server 는 허용해줘야 한다.
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        // config.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://www.bitcamp.co.kr"));
+        config.setAllowedOrigins(List.of("*"));
+        config.setAllowedMethods(List.of("*"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(false);
+        config.applyPermitDefaultValues();
+
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }
