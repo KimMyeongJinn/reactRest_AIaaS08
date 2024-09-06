@@ -2,11 +2,15 @@ package org.suhodo.carserver.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -16,6 +20,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
+
+    /* Spring Security내부에서 인증과정시 사용하는 AuthenticationManager객체를
+    LoginController에서 접근할 수 있도록
+    Spring Container의 Bean으로 등록시켜준다.
+    * */
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
 
     // 우리가 인증한 UserDetailsService객체에 암호화 객체 설정을 추가한다.
     // 암호를 DB에 저장하기 전에 BCrypt 암호화 처리
@@ -29,6 +42,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // Spring Security의 보안 설정/주소 권한 허용...
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+        http.csrf().disable()   // CSRF는 세션을 사용하는데 Rest API 서버로 작동하기 때문에 disable해도 된다.
+                .cors().and()   // CORS는 사용한다.
+                // Rest API 서버는 세션 상태를 유지하지 않으므로 STATELESS
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .authorizeRequests()
+                // /login엔드포인트에 대한 POST요청은 누구나 접근을 허용함
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                // 다른 엔트포인트 요청은 인증 과정을 거쳐야 접근할 수 있다.
+                .anyRequest().authenticated();
     }
 }
