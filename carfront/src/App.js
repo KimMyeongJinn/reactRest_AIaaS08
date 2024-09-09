@@ -1,5 +1,5 @@
 import "./App.css";
-import MainApp from "./ex07_add_car/MainApp";
+import MainApp from "./ex08_add_fetch/MainApp";
 
 function App() {
   return <MainApp />;
