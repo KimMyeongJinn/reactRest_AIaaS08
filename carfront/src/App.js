@@ -1,5 +1,5 @@
 import "./App.css";
-import MainApp from "./ex14_fetch_token/MainApp";
+import MainApp from "./ex15_login_message/MainApp";
 
 function App() {
   return <MainApp />;
