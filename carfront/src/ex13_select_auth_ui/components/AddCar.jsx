@@ -4,13 +4,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
 } from "@mui/material";
 import { Button, TextField, Stack } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 
-function EditCar(props) {
-  const { data, updateCar } = props;
+function AddCar(props) {
+  const { addCar } = props;
   const [open, setOpen] = useState(false); // 자동차 정보 입력 대화상자 열림 여부
   const [car, setCar] = useState({
     // 자동차 입력 정보
@@ -21,33 +19,23 @@ function EditCar(props) {
     price: "",
   });
 
-  const handleClickOpen = () => {
-    console.log(data);
-    setCar({
-      brand: data.row.brand,
-      model: data.row.model,
-      color: data.row.color,
-      year: data.row.year,
-      price: data.row.price,
-    });
-    setOpen(true);
-  };
+  const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleChange = (e) =>
     setCar({ ...car, [e.target.name]: e.target.value });
   const handleSave = () => {
-    updateCar(car, data.id);
+    addCar(car);
     handleClose();
   };
 
   return (
     <div>
-      {/* <button onClick={handleClickOpen}>Edit Car</button> */}
-      <IconButton onClick={handleClickOpen}>
-        <EditIcon color="primary" />
-      </IconButton>
+      {/* <button onClick={handleClickOpen}>New Car</button> */}
+      <Button variant="contained" onClick={handleClickOpen}>
+        New Car
+      </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Edit Car</DialogTitle>
+        <DialogTitle>New Car</DialogTitle>
         {/* <DialogContent>
           <Stack spacing={2} mt={1}>
             <input
@@ -92,8 +80,8 @@ function EditCar(props) {
             <TextField
               label="Brand"
               name="brand"
-              variant="standard"
               autoFocus
+              variant="standard"
               value={car.brand}
               onChange={handleChange}
             />
@@ -128,8 +116,8 @@ function EditCar(props) {
           </Stack>
         </DialogContent>
         <DialogActions>
-          {/* <button onClick={handleClose}>Cancel</button>
-          <button onClick={handleSave}>Save</button> */}
+          {/* <button onClick={handleClose}>Cancel</button> */}
+          {/* <button onClick={handleSave}>Save</button> */}
           <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={handleSave}>Save</Button>
         </DialogActions>
@@ -138,4 +126,4 @@ function EditCar(props) {
   );
 }
 
-export default EditCar;
+export default AddCar;
