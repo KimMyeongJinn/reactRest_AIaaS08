@@ -14,10 +14,11 @@ import java.util.Date;
 public class JwtService {
 
     /* 토큰 발급시 필요 정보*/
-    static final long EXPIRATION_TIME = 60 * 60 * 24; // 1일=86400000, 토큰 유효시간
+    // EXPIRATION_TIME시간을 밀리세컨드(ms)단위로 부여해야 함
+    static final long EXPIRATION_TIME = 60 * 60 * 24 * 1 * 1000; // 1일=86,400,000, 토큰 유효시간, 60초, 60분, 24시간, 1일, 1000ms
     static final String PREFIX = "Bearer";                // jwt 토큰 앞에 붙이는 문자열
     /*토큰을 발행/검증 시 사용하는 비밀키*/
-    static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);0
     
     // 토큰 발급 메서드(비밀키로 서명이 이루어짐)
     public String getToken(String username){
