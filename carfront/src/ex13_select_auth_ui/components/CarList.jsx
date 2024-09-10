@@ -5,8 +5,10 @@ import { Snackbar, IconButton } from "@mui/material";
 import AddCar from "./AddCar";
 import EditCar from "./EditCar";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Button, Stack } from "@mui/material";
 
-function CarList() {
+function CarList(props) {
+  const { notAuth } = props;
   const [cars, setCars] = useState([]); // car목록을 서버로부터 가져와서 저장
   const [open, setOpen] = useState(false); // 알람 메시지 상태
 
@@ -101,9 +103,19 @@ function CarList() {
     },
   ];
 
+  const logout = () => {
+    sessionStorage.removeItem("jwt");
+    notAuth();
+    //window.location.reload();
+  };
+
   return (
     <>
-      <AddCar addCar={addCar} />
+      <Stack direction="row" spacing={10} mt={1}>
+        <AddCar addCar={addCar} />
+        <Button onClick={logout}>Logout</Button>
+      </Stack>
+
       <div style={{ height: 500, width: "100%" }}>
         {/* getRowId() == row.id */}
         <DataGrid

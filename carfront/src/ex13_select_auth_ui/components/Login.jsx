@@ -8,7 +8,9 @@ function Login() {
     username: "",
     password: "",
   });
-  const [isAuthenticated, setAuth] = useState(false);
+
+  const bAuth = sessionStorage.getItem("jwt") !== null ? true : false;
+  const [isAuthenticated, setAuth] = useState(bAuth);
 
   const handleChange = (e) =>
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -29,8 +31,10 @@ function Login() {
       .catch((err) => console.error(err));
   };
 
+  const notAuth = () => setAuth(false);
+
   if (isAuthenticated) {
-    return <CarList />;
+    return <CarList notAuth={notAuth} />;
   } else {
     return (
       <div>
