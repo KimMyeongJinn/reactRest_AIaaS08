@@ -1,5 +1,5 @@
 import "./App.css";
-import MainApp from "./ex12_login/MainApp";
+import MainApp from "./ex13_select_auth_ui/MainApp";
 
 function App() {
   return <MainApp />;
